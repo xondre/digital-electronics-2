@@ -1,5 +1,5 @@
 
-# Lab 2: YOUR_FIRSTNAME LASTNAME
+# Lab 2: ADAM ONDREJKA
 
 ### GPIO control registers
 
@@ -24,6 +24,6 @@
 
 ### Traffic light
 
-3. Scheme of traffic light application with one red/yellow/green light for cars, one red/green light for pedestrians, and one push button. Connect AVR device, LEDs, resistors, push button (for pedestrians), and supply voltage. The image can be drawn on a computer or by hand. Always name all components and their values!
+3. Scheme of traffic light application with one red/yellow/green light for cars, one red/green light for pedestrians, and one push button.
 
    ![schematic](traffic_lights.png)
