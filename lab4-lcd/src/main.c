@@ -85,7 +85,7 @@ int main(void)
 
   
     // Initialize display
-    lcd_init(LCD_DISP_ON_CURSOR_BLINK);
+    lcd_init(LCD_DISP_ON);
 
     
     // Put string(s) on LCD screen
@@ -125,10 +125,10 @@ ISR(TIMER2_OVF_vect)
     static uint8_t tenths = 0;  // Tenths of a second
     static uint8_t seconds[2] = {0,0};  // seconds
     static uint8_t minutes[2] = {0,0};  // minutes
-    char string_tenths;             // String for converted numbers by itoa()
-    char string_seconds[2];             // String for converted numbers by itoa()
-    char string_minutes[2];             // String for converted numbers by itoa()
-
+    char char_tenths;             
+    char char_seconds[2];             
+    char char_minutes[2];
+                 
     no_of_overflows++;
     if (no_of_overflows >= 6)
     {
@@ -162,26 +162,30 @@ ISR(TIMER2_OVF_vect)
             }
         }
 
-        itoa(tenths, string_tenths, 10);  // Convert decimal value to string
-        itoa(seconds[0], string_seconds[0], 10);  // Convert decimal value to string
-        itoa(seconds[1], string_seconds[1], 10);  // Convert decimal value to string
-        itoa(minutes[0], string_minutes[0], 10);  // Convert decimal value to string
-        itoa(minutes[1], string_minutes[1], 10);  // Convert decimal value to string
-        // Display "00:00.tenths"
+        //itoa(tenths, string_tenths, 10);  // Convert decimal value to string
+        //itoa(seconds[0], string_seconds[0], 10);  // Convert decimal value to string
+        //itoa(seconds[1], string_seconds[1], 10);  // Convert decimal value to string
+        //itoa(minutes[0], string_minutes[0], 10);  // Convert decimal value to string
+        //itoa(minutes[1], string_minutes[1], 10);  // Convert decimal value to string
+        char_tenths = (char) tenths+48;
+        char_seconds[0] = (char) seconds[0]+48;
+        char_seconds[1] = (char) seconds[1]+48;
+        char_minutes[0] = (char) minutes[0]+48;
+        char_minutes[1] = (char) minutes[1]+48;
         lcd_gotoxy(7, 0);
-        lcd_puts(string_tenths);
+        lcd_putc(char_tenths);
         lcd_gotoxy(6, 0);
-        lcd_putc(':');
+        lcd_putc('.');
         lcd_gotoxy(5, 0);
-        lcd_puts(string_seconds[0]);
+        lcd_putc(char_seconds[0]);
         lcd_gotoxy(4, 0);
-        lcd_puts(string_seconds[1]);
+        lcd_putc(char_seconds[1]);
         lcd_gotoxy(3, 0);
         lcd_putc(':');
         lcd_gotoxy(2, 0);
-        lcd_puts(string_minutes[0]);
+        lcd_putc(char_minutes[0]);
         lcd_gotoxy(1, 0);
-        lcd_puts(string_minutes[1]);
+        lcd_putc(char_minutes[1]);
     }
     // Else do nothing and exit the ISR
 }
