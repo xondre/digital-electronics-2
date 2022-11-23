@@ -23,8 +23,8 @@
 /* defining global variables      */
 uint8_t x_enable = 0; 
 uint8_t y_enable = 0;
-uint8_t x_value = 0;
-uint8_t y_value = 0;
+uint16_t x_value = 0;
+uint16_t y_value = 0;
 
 
 /*             */
@@ -39,7 +39,7 @@ int main(void)
 {
     // Initialize display
     lcd_init(LCD_DISP_ON);
-     lcd_gotoxy(1, 0); lcd_puts("value:");
+     //lcd_gotoxy(1, 0); lcd_puts("value:");
     // lcd_gotoxy(3, 1); lcd_puts("key:");
     // lcd_gotoxy(8, 0); lcd_puts("a");  // Put ADC value in decimal
     // lcd_gotoxy(13,0); lcd_puts("b");  // Put ADC value in hexadecimal
@@ -83,19 +83,31 @@ int main(void)
  * Function: Timer/Counter1 overflow interrupt
  * Purpose:  Use single conversion mode and start conversion every 100 ms.
  **********************************************************************/
-ISR(TIMER1_OVF_vect)
+ISR(TIMER0_OVF_vect)
 {
-    uint8_t x_enable = 0;
-    // Select input channel ADC0 for x axis
-    ADMUX &= ~((1<<MUX0) | (1<<MUX1) | (1<<MUX2) | (1<<MUX3));
-    // Start ADC conversion
-    ADCSRA |= (1<<ADSC);
-
-    uint8_t y_enable = 0;
+    if (x_enable == 0)
+    {
+      if (y_enable == 0)
+      {
+        x_enable = 1;  
+        // Select input channel ADC0 for x axis
+        ADMUX &= ~((1<<MUX0) | (1<<MUX1) | (1<<MUX2) | (1<<MUX3));
+        // Start ADC conversion
+        ADCSRA |= (1<<ADSC);
+      }
+    }
+    else if (y_enable == 0)
+    {
+    y_enable = 1;
     // Select input channel ADC1 for y axis
     ADMUX |= (1<<MUX0);  ADMUX &= ~((1<<MUX1) | (1<<MUX2) | (1<<MUX3));
     // Start ADC conversion
     ADCSRA |= (1<<ADSC);
+    }else if (x_enable == 1 & y_enable == 1)
+    {
+     x_enable = 0;
+     y_enable = 0; 
+    }
 
 }
 
@@ -108,23 +120,24 @@ ISR(ADC_vect)
     char string[4];
 
 
-    if (x_enable==1)
+    if (x_enable == 1)
     {
-      x_value = ADC;    //save value from pin A0
-      x_enable = 0;     //reset global variable
-    }
-    else if(y_enable==1)
-    {
-      y_value = ADC;  //save value from pin A1
-      y_enable = 0;   //reset global variable
-
+      if (y_enable == 0)
+      {
+        x_value = ADC;    //save value from pin A0
+      }else if (y_enable==1)
+      {
+        y_value = ADC;  //save value from pin A1
+      }
     }
     lcd_gotoxy(1, 0); lcd_puts("x:");
     itoa(x_value, string, 10);
+    lcd_gotoxy(8, 0); lcd_puts("    ");
     lcd_gotoxy(8, 0); lcd_puts(string);
 
     lcd_gotoxy(1, 1); lcd_puts("y:");
     itoa(y_value, string, 10);
+    lcd_gotoxy(8, 1); lcd_puts("    ");
     lcd_gotoxy(8, 1); lcd_puts(string);
 
 
