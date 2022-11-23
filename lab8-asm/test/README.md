@@ -6,11 +6,11 @@
 
    | **Instruction** | **Binary opcode** | **Hex opcode** | **Compiler Hex opcode** |
    | :-- | :-: | :-: | :-: |
-   | `add r24, r0` | `0000_1110_1110_0000` | `0F 00` | `` |
-   | `com r26` | `` | `` | `` |
-   | `eor r26, r27` | `` | `` | `` |
-   | `mul r22, r20` | `1001_1110_1101_0100` | `9E D4` | `` |
-   | `ret` | `1001_0101_0000_1000` | `95 08` | `` |
+   | `add r24, r0` | `0000_1101_1000_0000` | `0d 80` | `80 0d` |
+   | `com r26` | `1001_0101_1010_0000` | `95 a0` | `a0 95` |
+   | `eor r26, r27` | `0010_0111_1010_1011` | `27 ab` | `ab 27` |
+   | `mul r22, r20` | `1001_1111_0110_0100` | `9f 64` | `64 9f` |
+   | `ret` | `1001_0101_0000_1000` | `95 08` | `08 95` |
 
 ### 4-bit LFSR
 
@@ -26,4 +26,4 @@
 
 3. Draw a flowchart of function `void burst_c(uint8_t number)` which generates a variable number of short pulses at output pin. Let the pulse width be the shortest one. The image can be drawn on a computer or by hand. Use clear descriptions of the individual steps of the algorithms.
 
-   ![your figure]()
+   ![burst](burst_function.png)
